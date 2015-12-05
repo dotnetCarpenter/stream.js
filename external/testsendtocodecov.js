@@ -10,10 +10,10 @@ process.stdin.on('data', function(chunk) {
     input += chunk;
     console.log("test send to codecov recieving data")
 
-    if(Math.round(Math.random() * 3) === 2) {
+    /*if(Math.round(Math.random() * 3) === 2) {
       console.error("Random errors happen")
       process.exit(1)
-    }
+    }*/
 });
 
 process.stdin.on('end', function() {
@@ -25,4 +25,5 @@ process.stdin.on('end', function() {
     process.exit(1)
   }
   console.log("test send to codecov done")
+  setInterval(function(){}, 1000)
 })
