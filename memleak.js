@@ -1,16 +1,17 @@
 const util = require('util');
 const streamjs = require('./lib/stream.js')
 const l = console.log
-const numbers = streamjs.makeNaturalNumbers()
 
+
+l(util.inspect(process.memoryUsage()))
+
+const numbers = streamjs.makeNaturalNumbers()
 l(util.inspect(process.memoryUsage()))
 
 l(numbers.item(100))
-
 l(util.inspect(process.memoryUsage()))
 
 l(numbers.item(1000))
-
 l(util.inspect(process.memoryUsage()))
 
 function mapBytes(table) {
