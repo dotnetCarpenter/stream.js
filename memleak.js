@@ -1,26 +1,47 @@
+'use strict'
+
 const util = require('util');
 const streamjs = require('./lib/stream.js')
 const l = console.log
 
 
-l(util.inspect(process.memoryUsage()))
+l(memoryUsage())
 
 const numbers = streamjs.makeNaturalNumbers()
-l(util.inspect(process.memoryUsage()))
+l(memoryUsage())
 
 l(numbers.item(100))
-l(util.inspect(process.memoryUsage()))
+l(memoryUsage())
 
 l(numbers.item(1000))
-l(util.inspect(process.memoryUsage()))
+l(memoryUsage())
 
-function mapBytes(table) {
-  const retTable = {}
-  //TODO: interpred each numeric value in *table* as bytes and
-  //      convert it upwards in unites so that the number has
-  //      maximum 4 digits. Fix the number with 2 decimals.
-  return retTable
+
+function memoryUsage() {
+  return util.inspect(mapBytes(process.memoryUsage()))
 }
 
-function mapCollection(collection) {}
-function eachCollection(collection) {}
+function mapBytes(table) {
+  // interpred each numeric value in *table* as bytes and
+  // convert it upwards in unites so that the number has
+  // maximum 4 digits. Fix the number with 2 decimals.
+  const unitList = ['B', 'KB', 'MB', 'GB', 'TB']
+  return mapCollection(table, value => conversion(value))
+  
+  function conversion(value, units = 0) {
+    if(String(value|0).length < 5) return value.toFixed(2) + unitList[units]
+    return conversion(value/1024, units + 1)
+  }
+}
+
+function mapCollection(collection, f) {
+  const ret = {}
+  eachCollection(collection, (value, key) => {
+    ret[key] = f(value)
+  })
+  return ret
+}
+function eachCollection(collection, f) {
+  for(let property in collection)
+    f(collection[property], property)
+}
