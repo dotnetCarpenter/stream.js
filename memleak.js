@@ -4,17 +4,22 @@ const util = require('util');
 const streamjs = require('./lib/stream.js')
 const l = console.log
 
-
 l(memoryUsage())
 
-const numbers = streamjs.makeNaturalNumbers()
+let numbers = streamjs.makeNaturalNumbers()
 l(memoryUsage())
 
+l('create 101 natural numbers')
 l(numbers.item(100))
 l(memoryUsage())
 
+l('create 1001 natural numbers')
 l(numbers.item(1000))
 l(memoryUsage())
+
+numbers = null
+l('null numbers variable')
+setTimeout(compose(memoryUsage, l), 10000)
 
 
 function memoryUsage() {
@@ -44,4 +49,13 @@ function mapCollection(collection, f) {
 function eachCollection(collection, f) {
   for(let property in collection)
     f(collection[property], property)
+}
+
+function compose(...f) {
+  return () =>
+    f.reduce(
+      (value,f) =>
+        f(value),
+        f.shift()()
+    )
 }
